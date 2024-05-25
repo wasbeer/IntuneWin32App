@@ -33,9 +33,12 @@ function Invoke-AzureStorageBlobUploadFinalize {
 		$XML += "<Latest>$($Chunk)</Latest>"
 	}
 	$XML += '</BlockList>'
-
+	
+	$Headers = @{
+	    "content-type" = "text/plain; charset=iso-8859-1"
+	}
 	try {
-		$WebResponse = Invoke-RestMethod -Uri $Uri -Method "Put" -Body $XML -ErrorAction Stop
+	    $WebResponse = Invoke-RestMethod -Uri $Uri -Method "Put" -Headers $Headers -Body $XML -ErrorAction Stop
 	}
 	catch {
 		Write-Warning -Message "Failed to finalize Azure Storage blob upload. Error message: $($_.Exception.Message)"
